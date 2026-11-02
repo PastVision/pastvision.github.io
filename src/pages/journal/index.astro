@@ -1,17 +1,31 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+const article = {
+  title: "What If We're Asking the Wrong Question About Consciousness?",
+  slug: "rethinking-consciousness-in-age-of-ai",
+  category: "PERSPECTIVE",
+  date: "03 NOV 2026",
+  readTime: "7 MIN READ",
+  excerpt: "The debate around machine consciousness often begins with a human-shaped assumption: that another kind of mind must experience the world the way we do. Perhaps the more useful question is what experience could look like when its foundations are entirely different."
+};
 ---
 <BaseLayout title="Journal — PastVision" description="Technical notes, build logs and ideas from PastVision.">
   <section class="page-intro section-wrap">
     <p class="eyebrow">FIELD NOTES / 03</p>
     <h1>Journal<span class="text-accent">.</span></h1>
     <p class="page-lede">Build logs, technical notes, discoveries and the occasional rabbit hole.</p>
-    <div class="page-meta"><span>WRITING IN PROGRESS</span><span>IDEAS / PROCESS / LEARNINGS</span></div>
+    <div class="page-meta"><span>IDEAS / PROCESS / LEARNINGS</span><span>01 PUBLISHED NOTE</span></div>
   </section>
-  <section class="section-wrap empty-journal">
-    <div class="empty-mark">[ 01 ]</div>
-    <h2>Notes are taking shape.</h2>
-    <p>The journal will hold practical writeups: how something was built, what broke, what worked and what I learned along the way.</p>
-    <a class="text-link" href="/projects/">Explore the projects first <span>→</span></a>
+  <section class="section-wrap journal-list">
+    <article class="journal-card">
+      <div class="journal-card-index">01 <span>—</span> FIRST PRINCIPLES</div>
+      <div class="journal-card-content">
+        <div class="journal-meta"><span>{article.category}</span><span>{article.date}</span><span>{article.readTime}</span></div>
+        <h2><a href={`/journal/${article.slug}/`}>{article.title}</a></h2>
+        <p>{article.excerpt}</p>
+        <a class="text-link" href={`/journal/${article.slug}/`}>Read the note <span>→</span></a>
+      </div>
+      <span class="journal-card-arrow" aria-hidden="true">↗</span>
+    </article>
   </section>
 </BaseLayout>
