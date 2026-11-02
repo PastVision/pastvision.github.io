@@ -1,0 +1,69 @@
+---
+---
+<section class="playground bf-playground" data-bf-root aria-labelledby="bf-title">
+  <div class="playground-heading">
+    <div>
+      <p class="eyebrow">INTERACTIVE PLAYGROUND</p>
+      <h2 id="bf-title">Run Brainfuck in your browser<span class="text-accent">.</span></h2>
+      <p class="playground-lede">Edit the program, provide input, and inspect the tape as the interpreter runs.</p>
+    </div>
+    <span class="playground-chip">8 INSTRUCTIONS</span>
+  </div>
+  <div class="bf-workspace">
+    <div class="bf-editor-panel">
+      <div class="panel-topline"><span>PROGRAM.BF</span><span class="panel-hint">Whitespace and comments are ignored</span></div>
+      <textarea class="bf-code" data-bf-code spellcheck="false" aria-label="Brainfuck source code">++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.</textarea>
+      <div class="bf-input-row">
+        <label for="bf-stdin">STDIN</label>
+        <input id="bf-stdin" data-bf-input type="text" placeholder="Optional character input" autocomplete="off" />
+      </div>
+      <div class="playground-actions">
+        <button class="demo-button demo-primary" type="button" data-bf-run>Run program <span>↗</span></button>
+        <button class="demo-button" type="button" data-bf-reset>Reset</button>
+        <button class="demo-button demo-quiet" type="button" data-bf-example>Load Hello World</button>
+      </div>
+    </div>
+    <div class="bf-output-panel">
+      <div class="panel-topline"><span>STDOUT</span><span data-bf-status role="status">READY</span></div>
+      <pre class="bf-output" data-bf-output aria-live="polite">Your program output will appear here.</pre>
+      <div class="tape-heading"><span>MEMORY TAPE</span><span data-bf-pointer>PTR 000</span></div>
+      <div class="bf-tape" data-bf-tape aria-label="First memory cells"></div>
+      <p class="playground-footnote">200 wrapping cells · 8-bit values · 1,000,000 instruction safety limit</p>
+    </div>
+  </div>
+</section>
+<script>
+  import "../scripts/brainfuck-playground.js";
+</script>
+<style>
+  .playground { margin-top:72px; padding:30px; border:1px solid var(--line-strong); background:linear-gradient(145deg,rgba(17,25,19,.96),rgba(8,12,9,.98)); }
+  .playground-heading { display:flex; justify-content:space-between; align-items:start; gap:24px; margin-bottom:26px; }
+  .playground-heading .eyebrow { margin-bottom:10px; }
+  .playground-heading h2 { font-size:clamp(25px,3vw,36px); letter-spacing:-.055em; margin:0 0 10px; }
+  .playground-lede { color:var(--muted); font-size:12px; line-height:1.8; margin:0; }
+  .playground-chip { flex:none; border:1px solid var(--line); color:var(--accent); padding:7px 9px; font:9px var(--mono); letter-spacing:.08em; }
+  .bf-workspace { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr); gap:14px; }
+  .bf-editor-panel,.bf-output-panel { min-width:0; border:1px solid var(--line); background:rgba(5,8,6,.55); padding:16px; }
+  .panel-topline,.tape-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--accent); font:9px var(--mono); letter-spacing:.1em; }
+  .panel-hint,.playground-footnote { color:var(--dim); font:9px/1.7 var(--mono); letter-spacing:0; text-transform:none; }
+  .bf-code { display:block; width:100%; min-height:205px; resize:vertical; margin:14px 0; padding:14px; border:1px solid var(--line); border-radius:0; outline:none; background:#070b08; color:#b8ffc9; font:12px/1.9 var(--mono); tab-size:2; }
+  .bf-code:focus,.bf-input-row input:focus { border-color:rgba(141,255,176,.6); }
+  .bf-input-row { display:flex; align-items:center; gap:12px; margin-bottom:15px; }
+  .bf-input-row label { color:var(--dim); font:9px var(--mono); }
+  .bf-input-row input { min-width:0; flex:1; padding:10px 12px; border:1px solid var(--line); border-radius:0; outline:none; background:#070b08; color:var(--text); font:11px var(--mono); }
+  .playground-actions { display:flex; flex-wrap:wrap; gap:8px; }
+  .demo-button { border:1px solid var(--line-strong); background:transparent; color:var(--text); padding:10px 12px; font:10px var(--mono); cursor:pointer; transition:border-color .2s,color .2s,background .2s; }
+  .demo-button:hover { border-color:var(--accent); color:var(--accent); }
+  .demo-primary { background:var(--accent); color:#08100b; border-color:var(--accent); font-weight:700; }
+  .demo-primary:hover { background:#b0ffc6; color:#08100b; }
+  .demo-quiet { color:var(--muted); }
+  .bf-output { min-height:100px; max-height:180px; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; margin:14px 0 22px; padding:14px; border:1px solid var(--line); background:#050806; color:#b8ffc9; font:12px/1.8 var(--mono); }
+  .tape-heading { padding-bottom:10px; border-bottom:1px solid var(--line); }
+  .bf-tape { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; padding-top:10px; }
+  .bf-cell { min-width:0; padding:7px 3px; text-align:center; border:1px solid var(--line); color:var(--muted); font:9px/1.5 var(--mono); }
+  .bf-cell small { display:block; color:var(--dim); font-size:8px; }
+  .bf-cell.is-pointer { color:#07100a; background:var(--accent); border-color:var(--accent); }
+  .bf-cell.is-pointer small { color:#24432e; }
+  .playground-footnote { margin:12px 0 0; }
+  @media(max-width:760px) { .playground{padding:20px 14px;margin-top:55px}.playground-heading{flex-direction:column}.bf-workspace{grid-template-columns:1fr}.panel-hint{display:none} }
+</style>

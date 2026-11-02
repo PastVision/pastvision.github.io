@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BrainfuckPlayground from "../../components/BrainfuckPlayground.astro";
+import Chip8Playground from "../../components/Chip8Playground.astro";
 import { projects } from "../../data/projects";
 
 export function getStaticPaths() {
@@ -11,6 +13,8 @@ export function getStaticPaths() {
 
 const { project } = Astro.props;
 const demoUrl = project.slug === "elden-ring-companion" ? "/eldenring/" : null;
+const hasBrainfuckDemo = project.slug === "brainfuck-interpreter";
+const hasChip8Demo = project.slug === "chip8-emulator";
 ---
 <BaseLayout title={`${project.name} — PastVision`} description={project.summary}>
   <article class="project-detail section-wrap">
@@ -43,9 +47,18 @@ const demoUrl = project.slug === "elden-ring-companion" ? "/eldenring/" : null;
         <div class="tag-list">{project.stack.map((tag) => <span class="tag">{tag}</span>)}</div>
       </section>
     </div>
+
+    {hasBrainfuckDemo && <BrainfuckPlayground />}
+    {hasChip8Demo && <Chip8Playground />}
+
     <div class="detail-actions">
       {demoUrl && <a class="button button-primary" href={demoUrl}>Open live demo <span>↗</span></a>}
       <a class="button button-primary repo-button" href={project.repo} target="_blank" rel="noreferrer">View source on GitHub <span>↗</span></a>
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .detail-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:48px; }
+  .detail-actions .repo-button { margin-top:0; }
+</style>
