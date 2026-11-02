@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Repositories — PastVision" description="Explore public repositories from PastVision on GitHub.">
+  <section class="section-wrap repositories-page" data-repositories-app>
+    <header class="page-intro">
+      <p class="eyebrow">THE CODE ARCHIVE / GITHUB</p>
+      <h1>Repositories<span class="text-accent">.</span></h1>
+      <p class="page-lede">A browsable index of public experiments, tools, applications and code. Select a repository to inspect its files without leaving PastVision.</p>
+      <div class="page-meta"><span data-repository-count>CONNECTING TO GITHUB…</span><span>PUBLIC REPOSITORIES</span><span>LIVE FROM GITHUB</span></div>
+    </header>
+
+    <div class="repo-toolbar">
+      <label class="repo-search-wrap"><span aria-hidden="true">⌕</span><input type="search" data-repo-search placeholder="Search repositories…" autocomplete="off" aria-label="Search repositories"></label>
+      <select data-repo-language aria-label="Filter by language"><option value="">All languages</option></select>
+      <select data-repo-sort aria-label="Sort repositories"><option value="updated">Recently updated</option><option value="name">Name</option><option value="stars">Most stars</option></select>
+    </div>
+    <div class="repo-layout">
+      <aside class="repo-list-panel">
+        <div class="repo-panel-heading"><span>REPOSITORY INDEX</span><span data-filter-count>—</span></div>
+        <div class="repo-list" data-repo-list aria-live="polite"><div class="repo-message">Loading public repositories…</div></div>
+        <div class="repo-list-foot">PASTVISION / PUBLIC SOURCE</div>
+      </aside>
+      <section class="repo-explorer-panel" aria-label="Repository source explorer">
+        <div class="repo-empty-state" data-repo-empty>
+          <span class="repo-empty-mark">{ }</span>
+          <p class="eyebrow">SOURCE EXPLORER</p>
+          <h2>Select a repository<span class="text-accent">.</span></h2>
+          <p>Choose a repository from the index to browse its directory and inspect individual source files.</p>
+        </div>
+        <div class="repo-selected" data-repo-selected hidden>
+          <div class="repo-selected-header">
+            <div class="repo-selected-title"><p class="eyebrow">SELECTED REPOSITORY</p><h2 data-selected-name></h2><p data-selected-description></p></div>
+            <a class="source-github-link" data-selected-github target="_blank" rel="noreferrer">OPEN ON GITHUB ↗</a>
+          </div>
+          <div class="repo-selected-meta"><span data-selected-language></span><span data-selected-updated></span><span data-selected-branch></span></div>
+          <div class="repo-source-window">
+            <aside class="repo-tree-panel">
+              <div class="repo-tree-heading">EXPLORER <span data-file-count>—</span></div>
+              <div class="repo-tree" data-file-tree><div class="repo-message">Loading file tree…</div></div>
+            </aside>
+            <section class="repo-code-panel">
+              <div class="repo-code-tab"><span data-active-file>Choose a file</span><div><span data-active-language></span><a data-active-file-link target="_blank" rel="noreferrer" hidden>VIEW ON GITHUB ↗</a></div></div>
+              <div class="repo-code-scroll"><div class="repo-code-message" data-code-message>Select a text file to preview its contents.</div><div class="repo-code-content" data-code-content hidden><div class="repo-line-numbers" data-line-numbers></div><pre><code data-code></code></pre></div></div>
+              <div class="repo-code-status"><span data-code-status>READY</span><span data-code-lines>— LINES</span></div>
+            </section>
+          </div>
+          <p class="repo-preview-note">Source is fetched on demand from GitHub and rendered as text only. Binary files, generated assets and files larger than 300 KB are excluded from preview.</p>
+        </div>
+      </section>
+    </div>
+    <p class="repo-api-note">Repository metadata and file trees are retrieved from GitHub's public API. No GitHub token, account sign-in or backend is required.</p>
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/repositories.js";
+</script>
+
+<style is:global>
+  /* Global is intentional: repository and file-tree rows are created at runtime by repositories.js. */
+  .repositories-page { padding-bottom:110px; }
+  .repo-toolbar { display:grid; grid-template-columns:minmax(220px,1fr) 180px 190px; gap:10px; margin:12px 0 18px; }
+  .repo-toolbar input,.repo-toolbar select { min-width:0; height:42px; border:1px solid var(--line-strong); border-radius:0; background:#0a100c; color:var(--text); padding:0 12px; font:10px var(--mono); outline:none; }
+  .repo-toolbar input:focus,.repo-toolbar select:focus { border-color:var(--accent); }
+  .repo-search-wrap { display:flex; align-items:center; gap:9px; border:1px solid var(--line-strong); padding-left:12px; background:#0a100c; color:var(--accent); }
+  .repo-search-wrap input { flex:1; border:0; background:transparent; }
+  .repo-search-wrap input:focus { border:0; }
+  .repo-layout { display:grid; grid-template-columns:310px minmax(0,1fr); min-height:620px; border:1px solid var(--line-strong); background:#080d09; }
+  .repo-list-panel { min-width:0; display:flex; flex-direction:column; border-right:1px solid var(--line); background:#0a100c; }
+  .repo-panel-heading,.repo-tree-heading { display:flex; justify-content:space-between; padding:15px 14px; border-bottom:1px solid var(--line); color:var(--dim); font:8px var(--mono); letter-spacing:.1em; }
+  .repo-list { display:grid; align-content:start; gap:2px; padding:8px; max-height:670px; overflow:auto; }
+  .repo-item { appearance:none; display:block; width:100%; min-width:0; margin:0; padding:12px 11px; border:1px solid transparent; border-radius:0; background:transparent; color:var(--text); text-align:left; font:inherit; line-height:1.5; cursor:pointer; transition:background .18s,border-color .18s,color .18s; }
+  .repo-item:hover { background:#ffffff04; border-color:var(--line); }
+  .repo-item.is-active { background:var(--accent-soft); border-color:rgba(141,255,176,.22); }
+  .repo-item:focus-visible,.tree-folder:focus-visible,.tree-file:focus-visible { outline:1px solid var(--accent); outline-offset:-2px; }
+  .repo-item-name { min-width:0; }
+  .repo-item-name { display:flex; align-items:center; gap:8px; font:11px var(--mono); overflow-wrap:anywhere; }
+  .repo-item-name::before { content:"◇"; color:var(--accent); }
+  .repo-item-description { display:block; margin:7px 0 0 17px; color:var(--muted); font-size:10px; line-height:1.6; }
+  .repo-item-meta { display:flex; gap:12px; margin:8px 0 0 17px; color:var(--dim); font:8px var(--mono); }
+  .repo-list-foot { margin-top:auto; padding:12px 14px; border-top:1px solid var(--line); color:var(--dim); font:8px var(--mono); letter-spacing:.08em; }
+  .repo-message { padding:17px 12px; color:var(--muted); font:10px/1.8 var(--mono); }
+  .repo-explorer-panel { min-width:0; }
+  .repo-empty-state { min-height:620px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:35px; text-align:center; }
+  .repo-empty-mark { display:grid; place-items:center; width:76px; height:76px; margin-bottom:28px; border:1px solid rgba(141,255,176,.35); color:var(--accent); font:24px var(--mono); box-shadow:inset 0 0 35px rgba(141,255,176,.05); }
+  .repo-empty-state .eyebrow { margin-bottom:9px; }
+  .repo-empty-state h2 { margin:0 0 10px; font-size:26px; letter-spacing:-.05em; }
+  .repo-empty-state p:last-child { max-width:380px; color:var(--muted); font-size:11px; line-height:1.9; }
+  .repo-selected[hidden],.repo-empty-state[hidden] { display:none; }
+  .repo-selected-header { display:flex; align-items:start; justify-content:space-between; gap:18px; padding:27px 25px 18px; }
+  .repo-selected-title { min-width:0; }
+  .repo-selected-title .eyebrow { margin-bottom:8px; }
+  .repo-selected-title h2 { margin:0 0 7px; font-size:25px; letter-spacing:-.05em; overflow-wrap:anywhere; }
+  .repo-selected-title p:last-child { max-width:540px; margin:0; color:var(--muted); font-size:10px; line-height:1.7; }
+  .repo-selected-meta { display:flex; flex-wrap:wrap; gap:16px; padding:0 25px 16px; color:var(--dim); font:8px var(--mono); text-transform:uppercase; }
+  .repo-source-window { display:grid; grid-template-columns:220px minmax(0,1fr); min-height:450px; margin:0 16px; border:1px solid var(--line-strong); background:#070b08; }
+  .repo-tree-panel { min-width:0; display:flex; flex-direction:column; border-right:1px solid var(--line); background:#0a0f0b; }
+  .repo-tree { padding:8px 6px; overflow:auto; max-height:550px; }
+  .tree-folder,.tree-file { appearance:none; display:flex; align-items:center; gap:7px; width:100%; min-width:0; margin:0; padding:6px 7px; border:1px solid transparent; border-radius:0; background:transparent; color:var(--muted); text-align:left; font:9px var(--mono); line-height:1.5; cursor:pointer; }
+  .tree-folder { color:#a6b6aa; }
+  .tree-folder:hover,.tree-file:hover { color:var(--text); background:#ffffff05; }
+  .tree-file.is-active { color:var(--accent); background:var(--accent-soft); border-color:rgba(141,255,176,.15); }
+  .tree-file span:last-child,.tree-folder span:last-child { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .tree-indent { flex:none; }
+  .tree-icon { flex:none; width:12px; color:var(--dim); text-align:center; }
+  .repo-code-panel { display:flex; flex-direction:column; min-width:0; }
+  .repo-code-tab { display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:42px; padding:0 13px; border-bottom:1px solid var(--line); color:var(--text); font:9px var(--mono); }
+  .repo-code-tab > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .repo-code-tab > div { display:flex; align-items:center; gap:12px; color:var(--dim); flex:none; }
+  .repo-code-tab a { color:var(--accent); font-size:8px; text-decoration:none; }
+  .repo-code-scroll { min-height:360px; max-height:550px; overflow:auto; }
+  .repo-code-message { padding:20px; color:var(--dim); font:10px/1.8 var(--mono); }
+  .repo-code-content { display:grid; grid-template-columns:46px minmax(0,1fr); min-width:max-content; }
+  .repo-line-numbers { padding:15px 10px 20px 0; border-right:1px solid var(--line); color:#48534b; text-align:right; user-select:none; white-space:pre; font:10px/1.75 var(--mono); }
+  .repo-code-content pre { margin:0; padding:15px 18px 20px; color:#c2d0c6; font:10px/1.75 var(--mono); tab-size:4; }
+  .repo-code-content code { font:inherit; white-space:pre; }
+  .repo-code-status { display:flex; justify-content:space-between; gap:12px; padding:9px 12px; border-top:1px solid var(--line); color:var(--dim); font:8px var(--mono); letter-spacing:.07em; }
+  .repo-preview-note,.repo-api-note { color:var(--dim); font:9px/1.8 var(--mono); }
+  .repo-preview-note { margin:12px 16px 0; }
+  .repo-api-note { margin-top:15px; }
+  @media(max-width:850px) { .repo-layout { grid-template-columns:260px minmax(0,1fr); } .repo-source-window { grid-template-columns:180px minmax(0,1fr); } }
+  @media(max-width:650px) {
+    .repo-toolbar { grid-template-columns:1fr 1fr; }
+    .repo-search-wrap { grid-column:1/-1; }
+    .repo-layout { grid-template-columns:1fr; }
+    .repo-list-panel { border-right:0; border-bottom:1px solid var(--line); }
+    .repo-list { max-height:300px; }
+    .repo-list-foot { display:none; }
+    .repo-empty-state { min-height:340px; }
+    .repo-selected-header { flex-direction:column; padding:20px 15px 14px; }
+    .repo-selected-meta { padding-inline:15px; }
+    .repo-source-window { grid-template-columns:1fr; margin:0 8px; }
+    .repo-tree-panel { border-right:0; border-bottom:1px solid var(--line); }
+    .repo-tree { max-height:220px; }
+    .repo-code-scroll { min-height:300px; }
+  }
+</style>

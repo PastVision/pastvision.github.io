@@ -1,5 +1,18 @@
 export type ProjectStatus = "active" | "complete" | "experimental" | "archived";
 
+export interface SourceFile {
+  path: string;
+  label: string;
+  language: string;
+}
+
+export interface SourceGroup {
+  repo: string;
+  branch: string;
+  label: string;
+  files: SourceFile[];
+}
+
 export interface Project {
   slug: string;
   name: string;
@@ -13,6 +26,8 @@ export interface Project {
   repo: string;
   featured: boolean;
   highlights: string[];
+  sources?: SourceGroup[];
+  sourceNotice?: string;
   notes?: string;
 }
 
@@ -28,6 +43,12 @@ export const projects: Project[] = [
     year: "2022",
     stack: ["C++", "SDL2", "Emulation"],
     repo: "https://github.com/PastVision/CHIP8",
+    sources: [{ repo: "PastVision/CHIP8", branch: "master", label: "CHIP-8 · C++", files: [
+      { path: "CHIP8/chip8.cpp", label: "chip8.cpp", language: "cpp" },
+      { path: "CHIP8/chip8.h", label: "chip8.h", language: "cpp" },
+      { path: "CHIP8/main.cpp", label: "main.cpp", language: "cpp" },
+      { path: "README.md", label: "README.md", language: "markdown" }
+    ] }],
     featured: true,
     highlights: [
       "Implemented the CHIP-8 memory map, registers, stack and program counter.",
@@ -48,6 +69,11 @@ export const projects: Project[] = [
     year: "2021",
     stack: ["Python", "Heuristics", "Optimization"],
     repo: "https://github.com/PastVision/hashcode21",
+    sources: [{ repo: "PastVision/hashcode21", branch: "main", label: "Hash Code 2021", files: [
+      { path: "README.md", label: "README.md", language: "markdown" },
+      { path: "practice/main.py", label: "practice/main.py", language: "python" },
+      { path: "qualifier/main.py", label: "qualifier/main.py", language: "python" }
+    ] }],
     featured: true,
     highlights: [
       "Practice round total score: 725,290,298.",
@@ -68,6 +94,10 @@ export const projects: Project[] = [
     year: "2026",
     stack: ["HTML", "CSS", "JavaScript", "localStorage"],
     repo: "https://github.com/PastVision/eldenring",
+    sources: [{ repo: "PastVision/eldenring", branch: "main", label: "The Lands Between", files: [
+      { path: "index.html", label: "index.html · app", language: "html" },
+      { path: "README.md", label: "README.md", language: "markdown" }
+    ] }],
     featured: true,
     highlights: [
       "Recommended progression across 18 regions.",
@@ -89,6 +119,20 @@ export const projects: Project[] = [
     year: "2021",
     stack: ["Python", "React", "Web scraping"],
     repo: "https://github.com/PastVision/kuk-results-python",
+    sources: [
+      { repo: "PastVision/kuk-results-python", branch: "main", label: "Python utility", files: [
+        { path: "main.py", label: "main.py", language: "python" },
+        { path: "kukres.py", label: "kukres.py", language: "python" },
+        { path: "captchapop.py", label: "captchapop.py", language: "python" },
+        { path: "README.md", label: "README.md", language: "markdown" },
+        { path: "requirements.txt", label: "requirements.txt", language: "text" }
+      ] },
+      { repo: "PastVision/kukresults", branch: "gh-pages", label: "React frontend · build", files: [
+        { path: "index.html", label: "index.html", language: "html" },
+        { path: "static/js/main.0c368948.chunk.js", label: "main bundle.js", language: "javascript" },
+        { path: "static/css/main.df35d0ff.chunk.css", label: "main bundle.css", language: "css" }
+      ] }
+    ],
     featured: true,
     highlights: [
       "Python utility for searching and saving results from the 2015 batch onward.",
@@ -108,6 +152,11 @@ export const projects: Project[] = [
     year: "2021",
     stack: ["Python", "Interpreters"],
     repo: "https://github.com/PastVision/brainfuck-interpreter-python",
+    sources: [{ repo: "PastVision/brainfuck-interpreter-python", branch: "main", label: "Brainfuck · Python", files: [
+      { path: "bfinterpreter.py", label: "bfinterpreter.py", language: "python" },
+      { path: "code.bf", label: "code.bf", language: "brainfuck" },
+      { path: "README.md", label: "README.md", language: "markdown" }
+    ] }],
     featured: false,
     highlights: [
       "Filters source input to the eight Brainfuck commands.",
@@ -126,6 +175,11 @@ export const projects: Project[] = [
     year: "2021",
     stack: ["Python", "Pygame"],
     repo: "https://github.com/PastVision/Sudoku-PyGame",
+    sources: [{ repo: "PastVision/Sudoku-PyGame", branch: "master", label: "Sudoku · Pygame", files: [
+      { path: "main.py", label: "main.py", language: "python" },
+      { path: "solver.py", label: "solver.py", language: "python" },
+      { path: "README.md", label: "README.md", language: "markdown" }
+    ] }],
     featured: false,
     highlights: [
       "Interactive 9×9 puzzle grid.",
@@ -144,6 +198,7 @@ export const projects: Project[] = [
     year: "2021",
     stack: ["Python", "PyQt5", "Windows Registry"],
     repo: "https://github.com/PastVision/PuttyServerAdder",
+    sourceNotice: "The repository contains environment-specific server labels and connection defaults. The in-page code preview is withheld until those details are sanitized; the public repository remains available on GitHub.",
     featured: false,
     highlights: [
       "Parses landscape-oriented server lists.",

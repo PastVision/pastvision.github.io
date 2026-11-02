@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BrainfuckPlayground from "../../components/BrainfuckPlayground.astro";
 import Chip8Playground from "../../components/Chip8Playground.astro";
+import SourceExplorer from "../../components/SourceExplorer.astro";
 import { projects } from "../../data/projects";
 
 export function getStaticPaths() {
@@ -50,6 +51,7 @@ const hasChip8Demo = project.slug === "chip8-emulator";
 
     {hasBrainfuckDemo && <BrainfuckPlayground />}
     {hasChip8Demo && <Chip8Playground />}
+    <SourceExplorer sources={project.sources || []} notice={project.sourceNotice} repoUrl={project.repo} />
 
     <div class="detail-actions">
       {demoUrl && <a class="button button-primary" href={demoUrl}>Open live demo <span>↗</span></a>}
