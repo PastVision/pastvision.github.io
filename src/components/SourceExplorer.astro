@@ -1,0 +1,132 @@
+---
+interface SourceFile {
+  path: string;
+  label: string;
+  language: string;
+}
+interface SourceGroup {
+  repo: string;
+  branch: string;
+  label: string;
+  files: SourceFile[];
+}
+interface Props {
+  sources?: SourceGroup[];
+  notice?: string;
+  repoUrl?: string;
+}
+const { sources = [], notice } = Astro.props;
+const firstSource = sources[0];
+const firstFile = firstSource?.files[0];
+---
+<section class="source-explorer" data-source-explorer aria-labelledby="source-explorer-title">
+  <div class="source-heading">
+    <div>
+      <p class="eyebrow">UNDER THE HOOD</p>
+      <h2 id="source-explorer-title">Explore the source<span class="text-accent">.</span></h2>
+      <p class="source-lede">Browse selected files from the project's public GitHub repository without leaving this page.</p>
+    </div>
+    {firstSource && <a class="source-github-link" data-source-repository-link href={`https://github.com/${firstSource.repo}`} target="_blank" rel="noreferrer">OPEN REPOSITORY ↗</a>}
+  </div>
+
+  {sources.length > 0 ? (
+    <>
+      {sources.length > 1 && <div class="source-repo-tabs" role="group" aria-label="Source repositories">
+        {sources.map((source, index) => <button type="button" class:list={["source-repo-button", { "is-active": index === 0 }]} data-source-group-index={index} aria-pressed={index === 0 ? "true" : "false"}>{source.label}</button>)}
+      </div>}
+      <div class="source-window" data-source-groups={JSON.stringify(sources)}>
+        <aside class="source-sidebar" aria-label="Repository files">
+          <div class="source-sidebar-title"><span class="folder-mark">▾</span> <span data-source-repo-title>{firstSource?.repo.split("/")[1]}</span></div>
+          {sources.map((source, groupIndex) => <div class="source-file-list" data-source-file-list data-source-group-files={groupIndex} hidden={groupIndex !== 0}>
+            {source.files.map((file, index) => <button class:list={["source-file-button", { "is-active": groupIndex === 0 && index === 0 }]} type="button" data-source-file-index={index} aria-pressed={groupIndex === 0 && index === 0 ? "true" : "false"}>
+              <span class="source-file-icon">{file.language === "cpp" ? "C+" : file.language === "python" ? "Py" : file.language === "markdown" ? "Md" : file.language === "javascript" ? "JS" : file.language === "html" ? "<>" : file.language === "css" ? "#" : file.language === "brainfuck" ? "Bf" : "·"}</span>
+              <span>{file.label}</span>
+            </button>)}
+          </div>)}
+          <div class="source-sidebar-foot">PUBLIC GITHUB SOURCE</div>
+        </aside>
+        <div class="source-code-panel">
+          <div class="source-tabbar">
+            <span class="source-active-tab" data-source-active-tab>{firstFile?.label}</span>
+            <div class="source-tab-actions">
+              <span class="source-language" data-source-language>{firstFile?.language.toUpperCase()}</span>
+              <a class="source-file-link" data-source-file-link href={firstFile ? `https://github.com/${firstSource?.repo}/blob/${firstSource?.branch}/${firstFile.path}` : `https://github.com/${firstSource?.repo}`} target="_blank" rel="noreferrer">VIEW FILE ↗</a>
+            </div>
+          </div>
+          <div class="source-code-scroll">
+            <div class="source-loading" data-source-loading role="status">Loading source file…</div>
+            <div class="source-code-content" data-source-code-content hidden>
+              <div class="source-line-numbers" data-source-line-numbers aria-hidden="true"></div>
+              <pre class="source-code"><code data-source-code></code></pre>
+            </div>
+          </div>
+          <div class="source-statusbar"><span data-source-status>CONNECTING TO GITHUB</span><span data-source-lines>— LINES</span></div>
+        </div>
+      </div>
+      <p class="source-note">Files load on demand from raw.githubusercontent.com and are displayed as text only. Large datasets, binaries and generated build artefacts are intentionally excluded from the preview.</p>
+    </>
+  ) : (
+    <div class="source-unavailable">
+      <p>{notice || "An in-page preview is not available for this repository yet."}</p>
+      <a class="source-github-link" href={Astro.props.repoUrl || "https://github.com/PastVision"} target="_blank" rel="noreferrer">OPEN REPOSITORY ↗</a>
+    </div>
+  )}
+</section>
+
+<script>
+  import "../scripts/source-explorer.js";
+</script>
+
+<style>
+  .source-explorer { margin-top:72px; }
+  .source-explorer [hidden] { display:none !important; }
+  .source-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:22px; }
+  .source-heading .eyebrow { margin:0 0 10px; }
+  .source-heading h2 { margin:0 0 9px; font-size:clamp(25px,3vw,36px); letter-spacing:-.055em; }
+  .source-lede { margin:0; color:var(--muted); font-size:12px; line-height:1.8; }
+  .source-github-link { flex:none; color:var(--accent); font:9px var(--mono); letter-spacing:.08em; text-decoration:none; border-bottom:1px solid var(--line-strong); padding:0 0 7px; }
+  .source-github-link:hover { color:var(--text); border-color:var(--accent); }
+  .source-repo-tabs { display:flex; gap:7px; flex-wrap:wrap; margin:0 0 10px; }
+  .source-repo-button { padding:8px 11px; border:1px solid var(--line); background:transparent; color:var(--muted); font:9px var(--mono); cursor:pointer; }
+  .source-repo-button:hover,.source-repo-button.is-active { color:var(--accent); border-color:var(--line-strong); background:rgba(141,255,176,.06); }
+  .source-window { display:grid; grid-template-columns:210px minmax(0,1fr); min-height:390px; border:1px solid var(--line-strong); background:#070b08; }
+  .source-sidebar { display:flex; flex-direction:column; min-width:0; border-right:1px solid var(--line); background:#0a0f0b; }
+  .source-sidebar-title { padding:15px 14px 13px; border-bottom:1px solid var(--line); color:var(--muted); font:10px var(--mono); overflow-wrap:anywhere; }
+  .folder-mark { color:var(--accent); margin-right:5px; }
+  .source-file-list { display:grid; align-content:start; gap:2px; padding:9px 7px; }
+  .source-file-button { display:flex; align-items:center; gap:9px; min-width:0; padding:9px 8px; border:1px solid transparent; background:transparent; color:var(--muted); text-align:left; font:10px var(--mono); cursor:pointer; }
+  .source-file-button span:last-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .source-file-button:hover { color:var(--text); background:rgba(255,255,255,.025); }
+  .source-file-button.is-active { color:var(--accent); background:rgba(141,255,176,.07); border-color:rgba(141,255,176,.15); }
+  .source-file-icon { width:21px; flex:none; color:var(--dim); font-size:9px; text-align:center; }
+  .source-file-button.is-active .source-file-icon { color:var(--accent); }
+  .source-sidebar-foot { margin-top:auto; padding:12px 14px; border-top:1px solid var(--line); color:var(--dim); font:8px var(--mono); letter-spacing:.08em; }
+  .source-code-panel { display:flex; flex-direction:column; min-width:0; }
+  .source-tabbar { display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:43px; padding:0 15px; border-bottom:1px solid var(--line); }
+  .source-active-tab { color:var(--text); font:10px var(--mono); }
+  .source-tab-actions { display:flex; align-items:center; gap:15px; }
+  .source-file-link { color:var(--accent); text-decoration:none; font:8px var(--mono); letter-spacing:.06em; }
+  .source-file-link:hover { color:var(--text); }
+  .source-language { color:var(--dim); font:8px var(--mono); letter-spacing:.08em; }
+  .source-code-scroll { flex:1; min-height:310px; max-height:540px; overflow:auto; }
+  .source-loading { padding:22px; color:var(--dim); font:10px var(--mono); }
+  .source-code-content { display:grid; grid-template-columns:48px minmax(0,1fr); min-width:max-content; }
+  .source-line-numbers { padding:16px 12px 20px 0; border-right:1px solid var(--line); color:#48534b; text-align:right; user-select:none; white-space:pre; font:11px/1.75 var(--mono); }
+  .source-code { margin:0; padding:16px 20px 20px; color:#c2d0c6; font:11px/1.75 var(--mono); tab-size:4; }
+  .source-code code { font:inherit; white-space:pre; }
+  .source-statusbar { display:flex; justify-content:space-between; gap:12px; padding:9px 13px; border-top:1px solid var(--line); color:var(--dim); font:8px var(--mono); letter-spacing:.07em; }
+  .source-note { margin:11px 0 0; color:var(--dim); font:9px/1.8 var(--mono); }
+  .source-unavailable { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:18px; border:1px solid var(--line-strong); background:#0a0f0b; color:var(--muted); font-size:12px; line-height:1.8; }
+  .source-unavailable p { margin:0; }
+  @media(max-width:650px) {
+    .source-heading { flex-direction:column; align-items:start; }
+    .source-window { grid-template-columns:1fr; }
+    .source-sidebar { border-right:0; border-bottom:1px solid var(--line); }
+    .source-sidebar-title { padding:11px 12px; }
+    .source-file-list { display:flex; overflow-x:auto; padding:7px; }
+    .source-file-button { flex:none; }
+    .source-sidebar-foot { display:none; }
+    .source-code-scroll { min-height:270px; }
+    .source-unavailable { align-items:flex-start; flex-direction:column; }
+  }
+</style>
