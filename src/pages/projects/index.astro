@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { projects } from "../../data/projects";
+---
+<BaseLayout title="Projects — PastVision" description="Selected software, systems and creative engineering projects by PastVision.">
+  <section class="page-intro section-wrap">
+    <p class="eyebrow">THE WORK / 01</p>
+    <h1>Projects<span class="text-accent">.</span></h1>
+    <p class="page-lede">A collection of builds, experiments and problem-solving exercises. Some are finished, some are still evolving.</p>
+    <div class="page-meta"><span>{projects.length} PROJECTS</span><span>SOFTWARE / SYSTEMS / EXPERIMENTS</span></div>
+  </section>
+  <section class="section-wrap section-block">
+    <div class="project-grid project-grid-all">
+      {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+    </div>
+  </section>
+</BaseLayout>

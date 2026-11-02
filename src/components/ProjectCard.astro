@@ -1,0 +1,22 @@
+---
+import type { Project } from "../data/projects";
+const { project, index = 0 } = Astro.props as { project: Project; index?: number };
+---
+<article class="project-card">
+  <a class="project-card-link" href={`/projects/${project.slug}/`} aria-label={`View ${project.name}`}>
+    <div class="project-card-top">
+      <span class="project-index">0{index + 1}</span>
+      <span class={`status status-${project.status}`}>{project.status}</span>
+    </div>
+    <p class="eyebrow">{project.eyebrow}</p>
+    <h3>{project.name}</h3>
+    <p class="project-summary">{project.summary}</p>
+    <div class="tag-list">
+      {project.stack.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+    <div class="project-card-bottom">
+      <span>{project.category}</span>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </div>
+  </a>
+</article>

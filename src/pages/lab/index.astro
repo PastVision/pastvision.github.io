@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { labAreas } from "../../data/lab";
+---
+<BaseLayout title="Lab — PastVision" description="Ongoing areas of experimentation at PastVision.">
+  <section class="page-intro section-wrap">
+    <p class="eyebrow">EXPERIMENTS / 02</p>
+    <h1>The Lab<span class="text-accent">.</span></h1>
+    <p class="page-lede">A working map of the things I'm curious about. Not a list of finished products — a record of directions worth exploring.</p>
+    <div class="page-meta"><span>ONGOING EXPLORATION</span><span>MAKE / TEST / UNDERSTAND</span></div>
+  </section>
+  <section class="section-wrap section-block lab-list">
+    {labAreas.map((area) => (
+      <article class="lab-row">
+        <span class="lab-number">{area.number}</span>
+        <div><h2>{area.title}</h2><p>{area.description}</p><div class="tag-list">{area.tags.map((tag) => <span class="tag">{tag}</span>)}</div></div>
+        <span class="lab-symbol" aria-hidden="true">↗</span>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
