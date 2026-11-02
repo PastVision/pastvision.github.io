@@ -1,0 +1,25 @@
+---
+const links = [
+  { href: "/projects/", label: "Projects" },
+  { href: "/lab/", label: "Lab" },
+  { href: "/journal/", label: "Journal" },
+  { href: "/about/", label: "About" }
+];
+const currentPath = Astro.url.pathname;
+---
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label="PastVision home">
+    <span class="wordmark-mark">PV</span>
+    <span>PAST<span class="wordmark-muted">VISION</span></span>
+  </a>
+  <nav class="main-nav" aria-label="Main navigation">
+    {links.map((link) => (
+      <a class:list={["nav-link", currentPath.startsWith(link.href) && "is-active"]} href={link.href}>
+        {link.label}
+      </a>
+    ))}
+  </nav>
+  <a class="header-github" href="https://github.com/PastVision" target="_blank" rel="noreferrer">
+    GitHub <span aria-hidden="true">↗</span>
+  </a>
+</header>

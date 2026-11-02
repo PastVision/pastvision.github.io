@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { projects } from "../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+const demoUrl = project.slug === "elden-ring-companion" ? "/eldenring/" : null;
+---
+<BaseLayout title={`${project.name} — PastVision`} description={project.summary}>
+  <article class="project-detail section-wrap">
+    <a class="back-link" href="/projects/">← Back to projects</a>
+    <header class="detail-header">
+      <p class="eyebrow">{project.eyebrow}</p>
+      <div class="detail-title-row">
+        <h1>{project.name}<span class="text-accent">.</span></h1>
+        <span class={`status status-${project.status}`}>{project.status}</span>
+      </div>
+      <p class="detail-lede">{project.summary}</p>
+      <div class="detail-meta">
+        <span>{project.category}</span><span>{project.year}</span><span>{project.stack.join(" / ")}</span>
+      </div>
+    </header>
+    <div class="detail-content">
+      <section>
+        <p class="eyebrow">OVERVIEW</p>
+        <p class="detail-description">{project.description}</p>
+        {project.notes && <p class="detail-note">{project.notes}</p>}
+      </section>
+      <section>
+        <p class="eyebrow">WHAT'S INSIDE</p>
+        <ul class="highlight-list">
+          {project.highlights.map((highlight) => <li>{highlight}</li>)}
+        </ul>
+      </section>
+      <section class="detail-stack">
+        <p class="eyebrow">BUILT WITH</p>
+        <div class="tag-list">{project.stack.map((tag) => <span class="tag">{tag}</span>)}</div>
+      </section>
+    </div>
+    <div class="detail-actions">
+      {demoUrl && <a class="button button-primary" href={demoUrl}>Open live demo <span>↗</span></a>}
+      <a class="button button-primary repo-button" href={project.repo} target="_blank" rel="noreferrer">View source on GitHub <span>↗</span></a>
+    </div>
+  </article>
+</BaseLayout>

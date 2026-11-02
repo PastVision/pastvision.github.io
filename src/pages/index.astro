@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { featuredProjects } from "../data/projects";
+import { labAreas } from "../data/lab";
+---
+<BaseLayout>
+  <section class="hero section-wrap">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="live-dot"></span> PERSONAL ENGINEERING SPACE</p>
+      <h1>Curiosity,<br /><span class="text-accent">made tangible.</span></h1>
+      <p class="hero-lede">
+        I build software, take things apart, and explore the space between
+        engineering and experimentation.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/projects/">Explore projects <span>↗</span></a>
+        <a class="text-link" href="/about/">A little about me <span>→</span></a>
+      </div>
+    </div>
+    <div class="hero-art" aria-label="Abstract PastVision identity graphic">
+      <div class="hero-orbit orbit-one"></div>
+      <div class="hero-orbit orbit-two"></div>
+      <div class="hero-core">PV<span>_</span></div>
+      <div class="hero-coordinate coordinate-one">OPEN / SYSTEMS</div>
+      <div class="hero-coordinate coordinate-two">BUILD / BREAK / LEARN</div>
+      <div class="hero-cross cross-one">+</div>
+      <div class="hero-cross cross-two">+</div>
+    </div>
+    <div class="hero-bottomline">
+      <span>INDEPENDENT THINKING / PRACTICAL BUILDING</span>
+      <span>SCROLL TO EXPLORE ↓</span>
+    </div>
+  </section>
+
+  <section class="section-wrap section-block">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">SELECTED WORK / 01</p>
+        <h2>Things I've <span class="text-muted">built.</span></h2>
+      </div>
+      <a class="text-link" href="/projects/">All projects <span>→</span></a>
+    </div>
+    <div class="project-grid">
+      {featuredProjects.map((project, index) => <ProjectCard project={project} index={index} />)}
+    </div>
+  </section>
+
+  <section class="section-wrap section-block lab-preview">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">CURRENT CURIOSITIES / 02</p>
+        <h2>The <span class="text-muted">lab.</span></h2>
+      </div>
+      <a class="text-link" href="/lab/">Inside the lab <span>→</span></a>
+    </div>
+    <div class="lab-grid">
+      {labAreas.slice(0, 3).map((area) => (
+        <article class="lab-card">
+          <span class="lab-number">{area.number}</span>
+          <h3>{area.title}</h3>
+          <p>{area.description}</p>
+          <div class="tag-list">{area.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-wrap statement-band">
+    <p class="eyebrow">THE IDEA</p>
+    <p class="statement">Not everything needs a roadmap. Some of the best things start with <span class="text-accent">“what if?”</span></p>
+    <a class="text-link" href="/journal/">Notes from the process <span>→</span></a>
+  </section>
+</BaseLayout>
